@@ -136,7 +136,7 @@ function(build_pkg)
     set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/doxygen/${PKG_NAME})
     file(MAKE_DIRECTORY ${DOXYGEN_OUTPUT_DIRECTORY})
 
-    doxygen_add_docs("${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}" ALL ${DOXYGEN_SOURCES})
+    doxygen_add_docs("${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}" ${DOXYGEN_SOURCES})
     set_target_properties("${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}" PROPERTIES FOLDER ${ARG_IDE_FOLDER})
 
     add_dependencies(GenerateDoxygen "${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}")

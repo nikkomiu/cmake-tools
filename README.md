@@ -52,6 +52,15 @@ configurations. To do so, it'll probably look something like:
 > **Note:** This can be a semicolon seperated list of values that contain multiple directories so
 > you aren't limited to _just_ using this and not being able to include other CMake modules.
 
+### Optional Dependencies
+
+- `doxygen`: Used to generate documentation.
+- `clang-format`: Used to run Clang Format on code.
+- `clang-check`: Used to run Clang Check on code.
+- `clang-tidy`: Used to run Clang Tidy on code.
+- `llvm-profdata`: Used to build profiling data when testing with code coverage.
+- `llvm-cov`: Used to generate HTML and LCOV reports when testing with code coverage.
+
 ## Modules
 
 This section outlines the use and properties of the modules that are available.
