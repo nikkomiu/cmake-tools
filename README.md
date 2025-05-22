@@ -1,7 +1,5 @@
 # CMake Tools
 
-> **TODO:** Use variables for setting the names of "generated" targets.
-
 This contains a few different tools that are useful. It can easily be added as a submodule to an
 existing project and versioned along with the rest of a CMake project.
 
@@ -70,9 +68,10 @@ directory, you can always set the relative path to the module.
 
 ### PrintVariables
 
-If this file is included in your `CMakeLists.txt` you can set the `PRINT_VARIABLES` variable
-to `ON` to view all of the variables that are set within the CMake project. This is primarily
-used to check variable outputs when building.
+Once you include this module in your CMake project you can call `print_variables()` anywhere you want
+to print out all of the current variables visible at that location. This is primarily used to check
+variable outputs when building as a simple debugging tool or to see what's available based on other
+side-effects of the CMake build process.
 
 It may be useful to enable in CI environments where the build server isn't using reproducible
 tooling and hosts (such as pre-built Docker containers or [nix](https://nix.dev)).
@@ -80,11 +79,12 @@ tooling and hosts (such as pre-built Docker containers or [nix](https://nix.dev)
 Example:
 
 ```cmake
-set(PRINT_VARIABLES ON)
+print_variables()
 ```
 
-> **TODO:** Switch this to be a function that can be called anywhere instead of a global variable.
-> Also allow specifying an output file to write the results to instead of just printing to the console.
+This can also be disabled globally by setting the `NO_PRINT_VARIABLES` flag to `ON`. If you want to use
+this as a CI variable only, you can set `NO_PRINT_VARIABLES` as a default of `ON` and override it for
+CI builds only.
 
 ### Git
 
