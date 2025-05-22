@@ -15,13 +15,15 @@ endif()
 function(test_pkg)
   set(options "")
   set(oneValueArgs PKG_NAME TEST_PREFIX IDE_FOLDER)
-  set(multiValueArgs PUBLIC_LINK_LIBRARIES PRIVATE_LINK_LIBRARIES)
+  set(multiValueArgs SOURCES PUBLIC_LINK_LIBRARIES PRIVATE_LINK_LIBRARIES)
   cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-  file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_DIR_NAME}/*.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_DIR_NAME}/*.cpp
-  )
+  if (NOT ARG_SOURCES)
+    file(GLOB_RECURSE ARG_SOURCES CONFIGURE_DEPENDS
+      ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_DIR_NAME}/*.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_DIR_NAME}/*.cpp
+    )
+  endif()
 
   set(TEST_PKG_NAME "${ARG_PKG_NAME}${TEST_TARGET_SUFFIX}")
 
@@ -31,7 +33,7 @@ function(test_pkg)
     NO_TEST_PKG ON
     NO_DOCS ON
     IDE_FOLDER ${ARG_IDE_FOLDER}
-    SOURCES ${TEST_SOURCES}
+    SOURCES ${ARG_SOURCES}
     PUBLIC_LINK_LIBRARIES
       GTest::gtest_main
       ${ARG_PUBLIC_LINK_LIBRARIES}

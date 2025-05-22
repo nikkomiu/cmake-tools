@@ -202,7 +202,8 @@ These are the **single value** parameters that can be passed into the `BuildPkg`
 These are the **multi-value** parameters that can be passed into the `BuildPkg` function:
 
 - `SOURCES`: A list of sources to use for the package build. If this is not specified, `GLOB_RECURSE` will be used along with `CONFIGURE_DEPENDS` to include header files in `include/` and source files in `src/`.
-- `DOC_SOURCES`: A list of sources to include for documentation with Doxygen. If this is not specified, `GLOB_RECURSE` will be used along with `CONFIGURE_DEPENDS` to include header files in `docs/`.
+- `DOC_SOURCES`: A list of sources to include for documentation with Doxygen. If this is not specified, `GLOB_RECURSE` will be used along with `CONFIGURE_DEPENDS` to include `md` and `txt` files in `docs/` project subdirectory.
+- `TEST_SOURCES`: A list of sources to include for the testing package. If this is not specified, `GLOB_RECURSE` will be used along with `CONFIGURE_DEPENDS` to include `hpp` and `cpp` files in the `tests/` project subdirectory.
 - `PUBLIC_LINK_LIBRARIES`: A list of public libraries to link to the build.
 - `PRIVATE_LINK_LIBRARIES`: A list of private libraries to link to the build.
 

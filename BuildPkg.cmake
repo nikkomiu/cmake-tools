@@ -16,7 +16,7 @@ endif()
 function(build_pkg)
   set(options "")
   set(oneValueArgs PKG_NAME PKG_TYPE NO_TEST_PKG NO_DOCS INCLUDE_PATH TEST_PREFIX IDE_FOLDER)
-  set(multiValueArgs SOURCES DOC_SOURCES PUBLIC_LINK_LIBRARIES PRIVATE_LINK_LIBRARIES)
+  set(multiValueArgs SOURCES TEST_SOURCES DOC_SOURCES PUBLIC_LINK_LIBRARIES PRIVATE_LINK_LIBRARIES)
   cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   set(PKG_NAME ${ARG_PKG_NAME})
@@ -166,6 +166,7 @@ function(build_pkg)
       PKG_NAME ${PKG_NAME}
       TEST_PREFIX ${ARG_TEST_PREFIX}
       IDE_FOLDER ${ARG_IDE_FOLDER}
+      SOURCES ${ARG_TEST_SOURCES}
     )
   endif()
 
