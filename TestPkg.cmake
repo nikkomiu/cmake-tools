@@ -51,7 +51,7 @@ function(test_pkg)
     )
   endif()
 
-  add_dependencies(${TEST_PKG_NAME} ${TEST_TARGET_NAME})
+  add_dependencies(${TEST_TARGET_NAME} ${TEST_PKG_NAME})
 
   if (WITH_COVERAGE)
     target_compile_options(${TEST_PKG_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
@@ -93,12 +93,12 @@ function(test_pkg)
     if (WITH_HTML_REPORT)
       add_custom_command(
         TARGET ${TEST_PKG_NAME}${COVER_TARGET_SUFFIX} POST_BUILD
-        COMMAND ${LLVM_CMD_PREFIX} llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/${COVERAGE_DIR_NAME}/${TEST_PKG_NAME} ${TEST_PKG_NAME} -instr-profile=${TEST_PKG_NAME}.profdata
+        COMMAND ${LLVM_CMD_PREFIX} llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/${COVERAGE_DIR_NAME}/${TEST_PKG_NAME}/html ${TEST_PKG_NAME} -instr-profile=${TEST_PKG_NAME}.profdata
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         BYPRODUCTS ${CMAKE_BINARY_DIR}/${COVERAGE_DIR_NAME}/${TEST_PKG_NAME}/index.html
       )
     endif()
 
-    add_dependencies(${TEST_PKG_NAME}${COVER_TARGET_SUFFIX} ${COVER_TARGET_NAME})
+    add_dependencies(${COVER_TARGET_NAME} ${TEST_PKG_NAME}${COVER_TARGET_SUFFIX})
   endif()
 endfunction()
