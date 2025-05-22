@@ -1,0 +1,7 @@
+if(PRINT_VARIABLES)
+  get_cmake_property(variable_names VARIABLES)
+  list(SORT variable_names)
+  foreach (variable_name ${variable_names})
+    message(STATUS "${variable_name}=${${variable_name}}")
+  endforeach ()
+endif()

@@ -1,0 +1,114 @@
+#ifndef BUILD_INFO_H
+#define BUILD_INFO_H
+
+#include <cstddef>
+
+/**
+ * Information about the top-level project "@PROJECT_NAME@".
+ *
+ * This includes the name, description, and version information as reported by CMake during the build.
+ */
+namespace @PROJECT_NAME@
+{
+
+/**
+ * Name of the project.
+ */
+constexpr char Name[] = "@PROJECT_NAME@";
+
+/**
+ * Project description.
+ */
+constexpr char Description[] = "@PROJECT_DESCRIPTION@";
+
+/**
+ * Homepage URL for the Project.
+ */
+constexpr char HomepageUrl[] = "@PROJECT_HOMEPAGE_URL@";
+
+/**
+ * Version number as a string in SemVer format.
+ */
+constexpr char VersionString[] = "@PROJECT_VERSION@";
+
+/**
+ * Version number as a string in SemVer format including the build (commit sha).
+ */
+constexpr char VersionStringLong[] = "@PROJECT_VERSION@+@GIT_COMMIT_SHA@";
+
+/**
+ * Numerical version components. They are always [MAJOR, MINOR, PATCH] without any additional information.
+ */
+constexpr size_t Version[3] = { @PROJECT_VERSION_MAJOR@, @PROJECT_VERSION_MINOR@, @PROJECT_VERSION_PATCH@ };
+
+/**
+ * Git information about the buildtree including commit information, author information, and tree status.
+ */
+namespace git
+{
+
+/**
+ * Branch name for the Git commit.
+ */
+constexpr char Branch[] = "@GIT_BRANCH@";
+
+/**
+ * Abbreviated Commit SHA for the Git commit of the build.
+ */
+constexpr char CommitSha[] = "@GIT_COMMIT_SHA@";
+
+/**
+ * Full length Commit SHA for the Git commit of the build.
+ */
+constexpr char CommitShaLong[] = "@GIT_COMMIT_SHA_FULL@";
+
+/**
+ * Commit message for the Git commit of the build.
+ */
+constexpr char Message[] = "@GIT_COMMIT_SUBJECT@";
+
+/**
+ * Name of the person who authored the commit.
+ */
+constexpr char AuthorName[] = "@GIT_COMMIT_AUTHOR_NAME@";
+
+/**
+ * Email address of the person who authored the commit.
+ */
+constexpr char AuthorEmail[] = "@GIT_COMMIT_AUTHOR_EMAIL@";
+
+/**
+ * Date the commit was created.
+ */
+constexpr char AuthorDate[] = "@GIT_COMMIT_AUTHOR_DATE@";
+
+/**
+ * Was the build tree dirty during the build.
+ */
+constexpr bool IsDirtyTree = @GIT_TREE_DIRTY@;
+
+};
+
+};
+
+#endif
+
+#ifndef BUILD_INFO_@PKG_NAME@
+#define BUILD_INFO_@PKG_NAME@
+
+/**
+ * Package level information for "@PKG_NAME@".
+ *
+ * The information here is specific to the library or executable within the project "@PROJECT_NAME@".
+ */
+namespace @PKG_NAME@
+{
+
+/**
+ * Name of the package.
+ */
+constexpr char Name[] = "@PKG_NAME@";
+
+};
+
+#endif
