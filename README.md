@@ -3,7 +3,17 @@
 This contains a few different tools that are useful. It can easily be added as a submodule to an
 existing project and versioned along with the rest of a CMake project.
 
-Most, if not all, of these tools are meant to be used within a monorepo CMake project.
+Most of these tools are meant to be used within a monorepo CMake project. However, all can be used
+in smaller or simpler projects.
+
+This is generally designed to simplify the build configuration by creating a convention-first build
+system for C++ projects using CMake. By including [vcpkg](#vcpkg), you can more closely mirror the
+functionality of other "modern" programming languages.
+
+Many of the conventions that are defined by this project can be customized to fit the needs of your
+particular structure. However, some of the conventions are currently "locked-in" and can't easily be
+changed. If you need to change one of them, you can always contribute to this repository or you can
+fork this repository and modify to fit your needs.
 
 ## Installation
 
@@ -390,6 +400,15 @@ HTML output can be customized by creating some files within the docs directory:
 >
 > You can put these files in the `docs/` directory to override the header, footer and stylesheet
 > files for your package.
+
+#### Examples
+
+Examples can be built for a given package as well by creating an `examples/` directory in the package
+path. Each example needs to be within its own subdirectory of the `examples/` subdirectory. The name
+of the target (by default) is the name of the directory that it is in. For example, the example within
+`examples/sweet/` will be called `sweet`. This may not be desirable so you can optionally create a `TARGET_NAME`
+file that contains the name of the target. The `TARGET_NAME` file can also be overridden globally with the
+`EXAMPLE_TARGET_NAME_FILE` option.
 
 ### TestPkg
 
