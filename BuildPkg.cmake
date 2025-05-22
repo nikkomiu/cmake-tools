@@ -11,7 +11,6 @@ find_package(Doxygen)
 
 if (DOXYGEN_FOUND AND NOT SKIP_GENERATE_DOXYGEN)
   add_custom_target(GenerateDoxygen)
-  set_target_properties(GenerateDoxygen PROPERTIES FOLDER Doxygen)
 endif()
 
 function(build_pkg)
@@ -138,7 +137,7 @@ function(build_pkg)
     file(MAKE_DIRECTORY ${DOXYGEN_OUTPUT_DIRECTORY})
 
     doxygen_add_docs("${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}" ALL ${DOXYGEN_SOURCES})
-    set_target_properties("${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}" PROPERTIES FOLDER Doxygen)
+    set_target_properties("${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}" PROPERTIES FOLDER ${ARG_IDE_FOLDER})
 
     add_dependencies(GenerateDoxygen "${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}")
   endif()
