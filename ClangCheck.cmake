@@ -23,6 +23,7 @@ function(clang_check)
   cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   if(NOT CLANG_CHECK_EXECUTABLE)
+    message(STATUS "Binary for 'clang-check' not found. Not adding target to '${ARG_PKG_NAME}'.")
     return()
   endif()
 

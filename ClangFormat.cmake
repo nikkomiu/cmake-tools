@@ -23,6 +23,7 @@ function(clang_format)
   cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   if(NOT CLANG_FORMAT_EXECUTABLE)
+    message(STATUS "Binary for 'clang-format' not found. Not adding target to '${ARG_PKG_NAME}'.")
     return()
   endif()
 

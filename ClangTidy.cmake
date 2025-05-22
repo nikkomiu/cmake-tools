@@ -26,6 +26,7 @@ function(clang_tidy)
   set(TIDY_DRY_NAME ${ARG_PKG_NAME}${CLANG_TIDY_SUFFIX}${CLANG_DRY_SUFFIX})
 
   if(NOT CLANG_TIDY_EXECUTABLE)
+    message(STATUS "Binary for 'clang-tidy' not found. Not adding target to '${ARG_PKG_NAME}'.")
     return()
   endif()
 
