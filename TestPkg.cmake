@@ -1,8 +1,10 @@
 set(TEST_DIR_NAME "tests" CACHE STRING "Directory for the test code")
+set(COVERAGE_DIR_NAME "coverage" CACHE STRING "Directory for the test code")
 
 set(TEST_TARGET_NAME "TestAll" CACHE STRING "Name of the testing target")
 set(COVER_TARGET_NAME "CoverAll" CACHE STRING "Name of the test coverage target")
 set(TEST_TARGET_SUFFIX "Test" CACHE STRING "Suffix for the testing target")
+set(COVER_TARGET_SUFFIX "Cover" CACHE STRING "Suffix for the testing target")
 
 add_custom_target(${TEST_TARGET_NAME})
 
@@ -55,12 +57,12 @@ function(test_pkg)
     target_compile_options(${TEST_PKG_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
     target_link_libraries(${TEST_PKG_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
 
-    add_custom_target(${TEST_PKG_NAME}_coverage
+    add_custom_target(${TEST_PKG_NAME}${COVER_TARGET_SUFFIX}
       COMMAND $<TARGET_FILE:${TEST_PKG_NAME}> --gtest_output=xml:${CMAKE_CURRENT_BINARY_DIR}/default.xml
       DEPENDS ${TEST_PKG_NAME}
     )
 
-    set_target_properties(${TEST_PKG_NAME}_coverage PROPERTIES FOLDER ${ARG_IDE_FOLDER})
+    set_target_properties(${TEST_PKG_NAME}${COVER_TARGET_SUFFIX} PROPERTIES FOLDER ${ARG_IDE_FOLDER})
 
     # macOS has llvm-profdata in Xcode's toolchain, but it is not in the PATH
     # by default. We need to use xcrun to use it.
@@ -71,7 +73,7 @@ function(test_pkg)
 
     # Generate coverage data from raw profile data
     add_custom_command(
-      TARGET ${TEST_PKG_NAME}_coverage POST_BUILD
+      TARGET ${TEST_PKG_NAME}${COVER_TARGET_SUFFIX} POST_BUILD
       COMMAND ${LLVM_CMD_PREFIX} llvm-profdata merge -o ${TEST_PKG_NAME}.profdata default.profraw
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/${TEST_PKG_NAME}.profdata
@@ -80,23 +82,23 @@ function(test_pkg)
     # Generate LCOV coverage report
     if (WITH_LCOV_REPORT)
       add_custom_command(
-        TARGET ${TEST_PKG_NAME}_coverage POST_BUILD
-        COMMAND ${LLVM_CMD_PREFIX} llvm-cov export -format=lcov ${TEST_PKG_NAME} -instr-profile=${TEST_PKG_NAME}.profdata > ${CMAKE_BINARY_DIR}/coverage/${TEST_PKG_NAME}/lcov.info
+        TARGET ${TEST_PKG_NAME}${COVER_TARGET_SUFFIX} POST_BUILD
+        COMMAND ${LLVM_CMD_PREFIX} llvm-cov export -format=lcov ${TEST_PKG_NAME} -instr-profile=${TEST_PKG_NAME}.profdata > ${CMAKE_BINARY_DIR}/${COVERAGE_DIR_NAME}/${TEST_PKG_NAME}/lcov.info
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        BYPRODUCTS ${CMAKE_BINARY_DIR}/coverage/${TEST_PKG_NAME}/lcov.info
+        BYPRODUCTS ${CMAKE_BINARY_DIR}/${COVERAGE_DIR_NAME}/${TEST_PKG_NAME}/lcov.info
       )
     endif()
 
     # Generate HTML coverage report
     if (WITH_HTML_REPORT)
       add_custom_command(
-        TARGET ${TEST_PKG_NAME}_coverage POST_BUILD
-        COMMAND ${LLVM_CMD_PREFIX} llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/coverage/${TEST_PKG_NAME} ${TEST_PKG_NAME} -instr-profile=${TEST_PKG_NAME}.profdata
+        TARGET ${TEST_PKG_NAME}${COVER_TARGET_SUFFIX} POST_BUILD
+        COMMAND ${LLVM_CMD_PREFIX} llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/${COVERAGE_DIR_NAME}/${TEST_PKG_NAME} ${TEST_PKG_NAME} -instr-profile=${TEST_PKG_NAME}.profdata
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        BYPRODUCTS ${CMAKE_BINARY_DIR}/coverage/${TEST_PKG_NAME}/index.html
+        BYPRODUCTS ${CMAKE_BINARY_DIR}/${COVERAGE_DIR_NAME}/${TEST_PKG_NAME}/index.html
       )
     endif()
 
-    add_dependencies(${TEST_PKG_NAME}_coverage ${COVER_TARGET_NAME})
+    add_dependencies(${TEST_PKG_NAME}${COVER_TARGET_SUFFIX} ${COVER_TARGET_NAME})
   endif()
 endfunction()

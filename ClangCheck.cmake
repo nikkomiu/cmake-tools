@@ -22,6 +22,10 @@ function(clang_check)
   set(multiValueArgs SOURCES)
   cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
+  if(NOT CLANG_CHECK_EXECUTABLE)
+    return()
+  endif()
+
   set(CHECK_NAME ${ARG_PKG_NAME}${CLANG_CHECK_SUFFIX})
   set(CHECK_DRY_NAME ${ARG_PKG_NAME}${CLANG_CHECK_SUFFIX}${CLANG_DRY_SUFFIX})
 
