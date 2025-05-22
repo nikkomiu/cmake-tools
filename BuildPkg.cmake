@@ -117,23 +117,56 @@ function(build_pkg)
 
   # Create documentation if DOXYGEN is installed and we should be adding docs for this package
   if (DOXYGEN_FOUND AND (NOT SKIP_GENERATE_DOXYGEN) AND (NOT ARG_NO_DOCS))
+    set(DOXYGEN_PROJECT_NAME "${PKG_NAME}")
+    set(DOXYGEN_PROJECT_BRIEF "API Documentation for ${PROJECT_NAME}::${PKG_NAME} (${GIT_BRANCH}@${GIT_COMMIT_SHA})")
+    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/doxygen/${PKG_NAME})
+
     set(DOXYGEN_SOURCES "${ARG_SOURCES}")
 
     if (NOT ARG_DOC_SOURCES)
       file(GLOB_RECURSE ARG_DOC_SOURCES CONFIGURE_DEPENDS
+        # include README files within source and headers
+        ${CMAKE_CURRENT_SOURCE_DIR}/${PUBLIC_DIR_NAME}/README.md
+        ${CMAKE_CURRENT_SOURCE_DIR}/${PRIVATE_DIR_NAME}/README.md
+
+        # include markdown and text files within the docs folder
         ${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/*.md
+        ${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/*.markdown
         ${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/*.txt
       )
     endif()
     list(APPEND DOXYGEN_SOURCES ${ARG_DOC_SOURCES})
 
-    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
-        list(APPEND DOXYGEN_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+    # if there is a README.md at the root of docs, use it as teh MAINPAGE
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/README.md")
+      set(DOXYGEN_USE_MDFILE_AS_MAINPAGE "${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/README.md")
+      message(STATUS "Using ${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/README.md for mainpage")
     endif()
 
-    set(DOXYGEN_PROJECT_NAME "${PKG_NAME}")
-    set(DOXYGEN_PROJECT_BRIEF "API Documentation for ${PROJECT_NAME}::${PKG_NAME} (${GIT_BRANCH}@${GIT_COMMIT_SHA})")
-    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/doxygen/${PKG_NAME})
+    # If there is a top-level README file, include it as well.
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+      list(APPEND DOXYGEN_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+
+      # if there isn't a mainpage yet, use the README
+      if(NOT DOXYGEN_USE_MDFILE_AS_MAINPAGE)
+        set(DOXYGEN_USE_MDFILE_AS_MAINPAGE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+      endif()
+    endif()
+
+    # if there is a stylesheet.css use it as the Doxygen header
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/stylesheet.css")
+      set(DOXYGEN_HTML_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/stylesheet.css")
+    endif()
+
+    # if there is a header.html use it as the Doxygen header
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/header.html")
+      set(DOXYGEN_HTML_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/header.html")
+    endif()
+
+    # if there is a footer.html use it as the Doxygen footer
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/footer.html")
+      set(DOXYGEN_HTML_FOOTER "${CMAKE_CURRENT_SOURCE_DIR}/${DOCS_DIR_NAME}/footer.html")
+    endif()
 
     # add the doxygen target and set its folder
     doxygen_add_docs("${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}" ${DOXYGEN_SOURCES})
