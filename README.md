@@ -111,9 +111,33 @@ These variables can be useful to get more complex diagnostics about a given buil
 
 ### ClangCheck
 
+> **TODO:** Document explicit use of `ClangCheck`.
+
+This is used within the `BuildPkg` module during the build process to include `ClangCheck` on all projects.
+If the `clang-check` binary is not installed on the system it will not be included in the build and the targets
+will not be exposed.
+
+You can manually install `clang-check` by downloading the [Latest LLVM Release](https://github.com/llvm/llvm-project/releases/latest). Currently, `clang-check` is a standalone executable that you can just add to your `PATH`.
+
 ### ClangFormat
 
+> **TODO:** Document explicit use of `ClangFormat`.
+
+This is used within the `BuildPkg` module during the build process to include `ClangFormat` on all projects.
+If the `clang-format` binary is not installed on the system it will not be included in the build and the targets
+will not be exposed.
+
+You can manually install `clang-format` by downloading the [Latest LLVM Release](https://github.com/llvm/llvm-project/releases/latest). Currently, `clang-format` is a standalone executable that you can just add to your `PATH`.
+
 ### ClangTidy
+
+> **TODO:** Document explicit use of `ClangTidy`.
+
+This is used within the `BuildPkg` module during the build process to include `ClangTidy` on all projects.
+If the `clang-tidy` binary is not installed on the system it will not be included in the build and the targets
+will not be exposed.
+
+You can manually install `clang-tidy` by downloading the [Latest LLVM Release](https://github.com/llvm/llvm-project/releases/latest). Currently, `clang-tidy` is a standalone executable that you can just add to your `PATH`.
 
 ### BuildPkg
 
@@ -217,3 +241,36 @@ build_pkg(
 > testing target but it **will** include documentation.
 
 ### TestPkg
+
+> **TODO:** Document explicit use of `TestPkg`.
+
+This is used within the `BuildPkg` module during the build process to include a testing package on all projects.
+By default, `TestPkg` will look for test files in the `tests` subdirectory of the project. This can be overridden
+globally by setting the `TEST_DIR_NAME` variable to the directory name where your tests are located.
+
+#### Global Targets
+
+These are global targets that are defined. They combine all of the project-specific targets (below) into a single target
+that can be easily run for all targets:
+
+- `TestAll`: Test all packages with this single target.
+- `CoverAll`: Test all packages with coverage using this target.
+
+#### Project Targets
+
+These are the project specific targets that are defined:
+
+- `<project_name>Test`: Run the tests for this project.
+- `<project_name>Cover`: Run the tests with coverage for this project.
+
+#### Customization
+
+The following global variables exist to customize the functionality of the `TestPkg`
+
+- `WITH_COVERAGE`: Defines if the coverage targets should be generated in the build. (default: `OFF`)
+- `TEST_DIR_NAME`: Sets the project directory to search for tests in. (default: `tests`)
+- `COVERAGE_DIR_NAME`: Sets the directory within the `CMAKE_BINARY_DIR` where coverage information is stored when running tests with coverage. (default: `coverage`)
+- `TEST_TARGET_NAME`: Sets the global testing target name that runs all tests. (default: `TestAll`)
+- `COVER_TARGET_NAME`: Sets the global coverage target name that runs all tests with coverage. (default `CoverAll`)
+- `TEST_TARGET_SUFFIX`: Sets the suffix for testing targets for each package. (default: `Test`)
+- `COVER_TARGET_SUFFIX`: Sets the suffix for testing targets with coverage for each package. (default: `Cover`)
