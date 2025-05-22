@@ -25,6 +25,10 @@ function(clang_tidy)
   set(TIDY_NAME ${ARG_PKG_NAME}${CLANG_TIDY_SUFFIX})
   set(TIDY_DRY_NAME ${ARG_PKG_NAME}${CLANG_TIDY_SUFFIX}${CLANG_DRY_SUFFIX})
 
+  if(NOT CLANG_TIDY_EXECUTABLE)
+    return()
+  endif()
+
   add_custom_target(
     ${TIDY_DRY_NAME}
     COMMAND ${CLANG_TIDY_EXECUTABLE}

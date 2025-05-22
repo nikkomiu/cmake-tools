@@ -22,6 +22,10 @@ function(clang_format)
   set(multiValueArgs SOURCES)
   cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
+  if(NOT CLANG_FORMAT_EXECUTABLE)
+    return()
+  endif()
+
   set(FORMAT_NAME ${ARG_PKG_NAME}${CLANG_FORMAT_SUFFIX})
   set(FORMAT_DRY_NAME ${ARG_PKG_NAME}${CLANG_FORMAT_SUFFIX}${CLANG_DRY_SUFFIX})
 
