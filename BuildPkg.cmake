@@ -134,10 +134,17 @@ function(build_pkg)
     set(DOXYGEN_PROJECT_NAME "${PKG_NAME}")
     set(DOXYGEN_PROJECT_BRIEF "API Documentation for ${PROJECT_NAME}::${PKG_NAME} (${GIT_BRANCH}@${GIT_COMMIT_SHA})")
     set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/doxygen/${PKG_NAME})
-    file(MAKE_DIRECTORY ${DOXYGEN_OUTPUT_DIRECTORY})
 
+    # add the doxygen target and set its folder
     doxygen_add_docs("${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}" ${DOXYGEN_SOURCES})
     set_target_properties("${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}" PROPERTIES FOLDER ${ARG_IDE_FOLDER})
+
+    # create the doxygen directory before building docs
+    add_custom_command(
+      TARGET ${PKG_NAME}${DOXYGEN_TARGET_SUFFIX} PRE_BUILD
+      COMMAND ${CMAKE_COMMAND} -E make_directory ${DOXYGEN_OUTPUT_DIRECTORY}
+      BYPRODUCTS ${DOXYGEN_OUTPUT_DIRECTORY}
+    )
 
     add_dependencies(GenerateDoxygen "${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}")
   endif()
