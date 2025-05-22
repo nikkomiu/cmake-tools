@@ -274,3 +274,5 @@ The following global variables exist to customize the functionality of the `Test
 - `COVER_TARGET_NAME`: Sets the global coverage target name that runs all tests with coverage. (default `CoverAll`)
 - `TEST_TARGET_SUFFIX`: Sets the suffix for testing targets for each package. (default: `Test`)
 - `COVER_TARGET_SUFFIX`: Sets the suffix for testing targets with coverage for each package. (default: `Cover`)
+- `WITH_LCOV_REPORT`: When enabled, this will generate an `lcov` report after running tests with coverage. This requires the `llvm-cov` binary within your `PATH` (on macOS it will use `xcrun`). (default: `OFF`)
+- `WITH_HTML_REPORT`: When enabled, this will generate an `html` report after running tests with coverage. This requires the `llvm-cov` binary within your `PATH` (on macOS it will use `xcrun`). (default: `OFF`)
