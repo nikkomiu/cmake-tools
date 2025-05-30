@@ -1,3 +1,6 @@
+# ######################################################################### #
+# Define Global Variables                                                   #
+# ######################################################################### #
 set(DOCS_DIR_NAME "docs" CACHE STRING "Directory for the documentation for Doxygen")
 set(PUBLIC_DIR_NAME "include" CACHE STRING "Directory for the public (include) headers")
 set(PRIVATE_DIR_NAME "src" CACHE STRING "Directory for the private source")
@@ -9,8 +12,10 @@ include(ClangCheck)
 include(ClangFormat)
 include(ClangTidy)
 
+# ######################################################################### #
+# Find Doxygen and Include Target                                           #
+# ######################################################################### #
 find_package(Doxygen)
-
 if (DOXYGEN_FOUND AND NOT SKIP_GENERATE_DOXYGEN)
   add_custom_target(GenerateDoxygen)
 endif()
@@ -49,7 +54,9 @@ function(build_pkg)
     # # this is usually @PKG_NAME@
     # string(CONFIGURE ${CMAKE_BUILD_INFO_CONFIG_OUT} CMAKE_BUILD_INFO_CONFIG_OUT_PATH)
 
-  # Include a global configuration header if it exists
+  # ######################################################################### #
+  # Include Global Configuration Header (if defined and exists)               #
+  # ######################################################################### #
   if(CMAKE_BUILD_INFO_CONFIG AND EXISTS "${CMAKE_SOURCE_DIR}/${CMAKE_BUILD_INFO_CONFIG}")
     # get the name of the file directly and drop the .in
     cmake_path(GET CMAKE_BUILD_INFO_CONFIG FILENAME CMAKE_BUILD_INFO_FILENAME)
@@ -65,7 +72,9 @@ function(build_pkg)
     message(STATUS "[${PKG_NAME}] Not including build info header.")
   endif()
 
-  # Include a public configuration header if it exists
+  # ######################################################################### #
+  # Include Public Configuration Header (if exists)                           #
+  # ######################################################################### #
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${PUBLIC_DIR_NAME}/${PKG_NAME}.hpp.in")
     configure_file(
       "${CMAKE_CURRENT_SOURCE_DIR}/${PUBLIC_DIR_NAME}/${INCLUDE_PATH}.hpp.in"
@@ -75,7 +84,9 @@ function(build_pkg)
     list(APPEND ARG_SOURCES "${CMAKE_CURRENT_BINARY_DIR}/${PUBLIC_DIR_NAME}/${INCLUDE_PATH}.hpp")
   endif()
 
-  # Include a private configuration header if it exists
+  # ######################################################################### #
+  # Include Private Configuration Header (if exists)                          #
+  # ######################################################################### #
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${PRIVATE_DIR_NAME}/${INCLUDE_PATH}.hpp.in")
     configure_file(
       "${CMAKE_CURRENT_SOURCE_DIR}/${PRIVATE_DIR_NAME}/${INCLUDE_PATH}.hpp.in"
@@ -85,6 +96,9 @@ function(build_pkg)
     list(APPEND ARG_SOURCES "${CMAKE_CURRENT_BINARY_DIR}/${PRIVATE_DIR_NAME}/${INCLUDE_PATH}.hpp")
   endif()
 
+  # ######################################################################### #
+  # Add Executable/Library Target                                             #
+  # ######################################################################### #
   if("${ARG_PKG_TYPE}" STREQUAL "EXE")
     add_executable(${PKG_NAME} ${ARG_SOURCES})
   else()
@@ -121,7 +135,9 @@ function(build_pkg)
       ${ARG_PRIVATE_LINK_LIBRARIES}
   )
 
-  # Create documentation if DOXYGEN is installed and we should be adding docs for this package
+  # ######################################################################### #
+  # Add Documentation (Doxygen)                                               #
+  # ######################################################################### #
   if (DOXYGEN_FOUND AND (NOT SKIP_GENERATE_DOXYGEN) AND (NOT ARG_NO_DOCS))
     set(DOXYGEN_PROJECT_NAME "${PKG_NAME}")
     set(DOXYGEN_PROJECT_BRIEF "API Documentation for ${PROJECT_NAME}::${PKG_NAME} (${GIT_BRANCH}@${GIT_COMMIT_SHA})")
@@ -187,7 +203,9 @@ function(build_pkg)
     add_dependencies(GenerateDoxygen "${PKG_NAME}${DOXYGEN_TARGET_SUFFIX}")
   endif()
 
-  # Add examples
+  # ######################################################################### #
+  # Add Examples                                                              #
+  # ######################################################################### #
   if (NOT ARG_NO_EXAMPLES AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${EXAMPLES_DIR_NAME}/)
     file(GLOB EXAMPLE_DIRS LIST_DIRECTORIES YES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${EXAMPLES_DIR_NAME}/*)
     foreach(EXAMPLE_DIR IN ITEMS ${EXAMPLE_DIRS})
@@ -217,7 +235,9 @@ function(build_pkg)
     endforeach()
   endif()
 
-  # Add the test package if it's not excluded from this package
+  # ######################################################################### #
+  # Add Test Package                                                          #
+  # ######################################################################### #
   if (NOT ARG_NO_TEST_PKG AND (NOT "${ARG_PKG_TYPE}" STREQUAL "EXE"))
     # Add code coverage flags if building in test mode and not an executable
     if (${WITH_COVERAGE})
@@ -238,6 +258,9 @@ function(build_pkg)
     )
   endif()
 
+  # ######################################################################### #
+  # Add Clang Tools                                                           #
+  # ######################################################################### #
   if(NOT SKIP_CLANG_FORMAT)
     clang_format(PKG_NAME ${PKG_NAME} SOURCES ${ARG_SOURCES} IDE_FOLDER ${ARG_IDE_FOLDER}/Clang)
   endif()

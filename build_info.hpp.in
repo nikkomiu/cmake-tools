@@ -1,7 +1,7 @@
 #ifndef BUILD_INFO_H
 #define BUILD_INFO_H
 
-#include <cstddef>
+#include <stddef.h>
 
 /**
  * Information about the top-level project "@PROJECT_NAME@".
