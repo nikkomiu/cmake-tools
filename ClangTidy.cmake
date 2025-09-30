@@ -6,7 +6,7 @@ set(CLANG_DRY_SUFFIX "Dry" CACHE STRING "Suffix for the clang check dry target")
 
 find_program(
   CLANG_TIDY_EXECUTABLE
-  NAMES clang-tidy
+  NAMES run-clang-tidy
 )
 
 if(CLANG_TIDY_EXECUTABLE)
@@ -34,9 +34,6 @@ function(clang_tidy)
     ${TIDY_DRY_NAME}
     COMMAND ${CLANG_TIDY_EXECUTABLE}
     -p ${CMAKE_BINARY_DIR}
-    -checks=*
-    -header-filter=""
-    -warnings-as-errors=*
     -quiet
     ${ARG_SOURCES}
   )
@@ -45,9 +42,6 @@ function(clang_tidy)
     ${TIDY_NAME}
     COMMAND ${CLANG_TIDY_EXECUTABLE}
     -p ${CMAKE_BINARY_DIR}
-    -checks=*
-    -header-filter=""
-    -warnings-as-errors=*
     -quiet
     -fix
     ${ARG_SOURCES}
