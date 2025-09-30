@@ -1,0 +1,20 @@
+#ifdef @UPPER_PKG_NAME@_BUILD
+    #ifdef _WIN32
+        // Use the Windows-specific export attribute
+        #define @UPPER_PKG_NAME@_API __declspec(dllexport)
+    #elif __GNUC__ >= 4
+        // Use the GCC-specific export attribute
+        #define @UPPER_PKG_NAME@_API __attribute__((visibility("default")))
+    #else
+        // Assume that no export attributes are needed
+        #define @UPPER_PKG_NAME@_API
+    #endif
+#else
+    #ifdef _WIN32
+        // Use the Windows-specific import attribute
+        #define @UPPER_PKG_NAME@_API __declspec(dllimport)
+    #else
+        // Assume that no import attributes are needed
+        #define @UPPER_PKG_NAME@_API
+    #endif
+#endif

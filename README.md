@@ -71,6 +71,10 @@ configurations. To do so, it'll probably look something like:
 - `llvm-profdata`: Used to build profiling data when testing with code coverage.
 - `llvm-cov`: Used to generate HTML and LCOV reports when testing with code coverage.
 
+The clang tools can be downloaded from the [GitHub Release](https://github.com/llvm/llvm-project/releases/tag/llvmorg-18.1.8) for LLVM.
+The `clang-format`, `clang-check`, and `clang-tidy` binaries are all within the `clang+llvm` assets.
+These binaries can be directly copied to your path as they currently do not have any external dependencies to function.
+
 ### vcpkg
 
 Commonly, I'll include `vcpkg` in my projects. However, I'm not a fan of including it at the system
@@ -289,6 +293,12 @@ There are two additional ones that can be specified within each package:
 
 - `include/${INCLUDE_PATH}.hpp.in`
 - `src/${INCLUDE_PATH}.hpp.in`
+
+#### Global Parameters
+
+- `CMAKE_BUILD_INFO_CONFIG`: Set a custom header file for the Build Info. If unset, the default `build_info.hpp.in` will be used (from this project).
+- `CMAKE_BUILD_INFO_HEADER_NAME`: Set the output filename to use for the Build Info header file. Defaults to `build_info.hpp`.
+- `BUILD_PKG_API_HEADER_NAME`: Set the output header file name to use for the Shared Library API. Defaults to `api.hpp`.
 
 #### Positional Parameters
 
