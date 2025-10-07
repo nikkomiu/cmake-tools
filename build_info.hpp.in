@@ -41,6 +41,8 @@ constexpr char VersionStringLong[] = "@PROJECT_VERSION@+@GIT_COMMIT_SHA@";
  */
 constexpr size_t Version[3] = { @PROJECT_VERSION_MAJOR@, @PROJECT_VERSION_MINOR@, @PROJECT_VERSION_PATCH@ };
 
+constexpr char BuildMode[] = "@CMAKE_BUILD_TYPE@";
+
 /**
  * Git information about the buildtree including commit information, author information, and tree status.
  */
